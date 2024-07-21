@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplier Price Calculator</title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/templatemo-574-mexant.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./customer.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="top">
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <a href="#" class="logo">
+                            <h2><n>W</n>heels<n>🛞</n>n <br> <n>L</n>ogistics</h2>
+                        </a>
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+                            <!-- <li class="scroll-to-section"><a href="#services">Services</a></li> -->
+                            <li class="scroll-to-section"><a href="#about">About</a></li>
+                            <li class="has-sub">
+                                <a href="#">Pages</a>
+                                <ul class="sub-menu">
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Our Services</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                </ul>
+                            </li>
+                            <li class="scroll-to-section"><a href="#">Testimonials</a></li>
+                            <li><a href="#">Contact Support</a></li> 
+                        </ul>        
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container c2 mt-5">
+        <div class="con1">
+        <div class="calculator">
+            <h1>Supplier Price Calculator</h1>
+            <form id="calculatorForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="fromPincode">From Pincode:</label>
+                        <input type="text" id="fromPincode" name="fromPincode" class="form-control">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="toPincode">To Pincode:</label>
+                        <input type="text" id="toPincode" name="toPincode" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight of an item (kg):</label>
+                    <input type="text" id="weight" name="weight" class="form-control">
+                </div>
+                <div class="inches">*(in inches)</div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="length">Length:</label>
+                        <input type="text" id="length" name="length" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="width">Width:</label>
+                        <input type="text" id="width" name="width" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="height">Height:</label>
+                        <input type="text" id="height" name="height" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="numItems">Number of items:</label>
+                        <input type="text" id="numItems" name="numItems" class="form-control">
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="suppliers mt-5" id="container2">
+            <h2>Suppliers List</h2>
+            <table id="suppliersTable" class="table table-responsive">
+                <thead>
+                    <tr class="table-head">
+                        <th>Supplier Name</th>
+                        <th>Distance</th>
+                        <th>Weight</th>
+                        <th>Calculated Price</th>
+                        <th>Docket Charge</th>
+                        <th>GST(5%)</th>
+                        <th>Total Freight</th>
+                        <th>TAT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- <div class="step">
+        <img src="./assets/images/steps.jpg" alt="">
+    </div> -->
+    <div class="space"></div>
+    <!-- <div class="highlights">
+        <div class="highlight">
+            <img src="./assets/images/speed.png" alt="Speed">
+            <h3>Speed</h3>
+            <p>Fast and reliable delivery services.</p>
+        </div>
+        <div class="highlight">
+            <img src="./assets/images/dedi.png" alt="Dedication">
+            <h3>Dedication</h3>
+            <p>Committed to excellence in service.</p>
+        </div>
+        <div class="highlight">
+            <img src="./assets/images/trust1.png" alt="Trust">
+            <h3>Trust</h3>
+            <p>Your trusted partner in logistics.</p>
+        </div>
+    </div> -->
+</div>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/transition.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="./customer.js"></script>
+</body>
+</html>
