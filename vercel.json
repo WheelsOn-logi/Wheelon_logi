@@ -4,7 +4,7 @@
     "rewrites": [
       {
         "source": "/(.*)",
-        "destination": "/public"
+        "destination": "/node-js-getting-started"
       }
     ]
    
