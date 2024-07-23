@@ -1,9 +1,9 @@
 const express = require('express');
-const sql = require('msnodesqlv8');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const path = require('path');
 const axios = require('axios');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,7 +22,14 @@ app.use(helmet({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const connectionString = "server=HP\\SQLEXPRESS;Database=loki;Trusted_Connection=Yes;Driver={ODBC Driver 17 for SQL Server}";
+const uri = "mongodb+srv://wheelson1234:As8ikDp8L06voJa0@lokesh25.ql7a7yq.mongodb.net/?retryWrites=true&w=majority&appName=lokesh25";
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 
 async function getCoordinates(pincode) {
     try {
@@ -73,7 +80,7 @@ app.post('/calculate', async (req, res) => {
     try {
         const coords1 = await getCoordinates(fromPincode);
         const coords2 = await getCoordinates(toPincode);
-        const distance = haversineDistance(coords1, coords2)+20;
+        const distance = haversineDistance(coords1, coords2) + 20;
 
         const absoluteWeight = weight * numItems;
         const volumetricWeight = ((length * height * width) / 1728) * numItems;
@@ -107,37 +114,31 @@ app.post('/calculate', async (req, res) => {
             priceColumn = 'price_per_kg_1000_plus';
         }
 
-        sql.open(connectionString, async (err, conn) => {
-            if (err) {
-                console.error('Error connecting to the database:', err.message);
-                res.status(500).json({ error: err.message });
-                return;
-            }
+        await client.connect();
+        const db = client.db("lokesh25");
+        const collection = db.collection('won');
 
-            const query = `SELECT supplier_name, ${priceColumn} as price_per_kg, tat FROM wondb1 WHERE distance_range = ?`;
-            
-            sql.query(connectionString, query, [distanceRange], (err, rows) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Database query failed: ' + err.message });
-                }
-    
-                const suppliers = rows.map(row => ({
-                    supplierName: row.supplier_name,
-                    distance,
-                    absoluteWeight,
-                    volumetricWeight,
-                    finalWeight,
-                    calculatedPrice: row.price_per_kg * finalWeight,
-                    tat: row.tat
-                }));
-    
-                res.json(suppliers);
-            });
-        
-        });
+        const query = { distance_range: distanceRange };
+        const projection = { supplier_name: 1, [priceColumn]: 1, tat: 1 };
+
+        const rows = await collection.find(query).project(projection).toArray();
+
+        const suppliers = rows.map(row => ({
+            supplierName: row.supplier_name,
+            distance,
+            absoluteWeight,
+            volumetricWeight,
+            finalWeight,
+            calculatedPrice: row[priceColumn] * finalWeight,
+            tat: row.tat
+        }));
+
+        res.json(suppliers);
     } catch (err) {
         console.error('Error calculating price:', err);
         res.status(500).json({ error: err.message });
+    } finally {
+        await client.close();
     }
 });
 
