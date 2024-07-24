@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const path = require('path');
 const axios = require('axios');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const XLSX = require('xlsx');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,21 +22,15 @@ app.use(helmet({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const uri = "mongodb+srv://wheelson1234:As8ikDp8L06voJa0@lokesh25.ql7a7yq.mongodb.net/?retryWrites=true&w=majority&appName=lokesh25";
+const workbook = XLSX.readFile('Book1.xlsx');  // Update the path to your Excel file
+const sheetName = workbook.SheetNames[0];
+const sheet = workbook.Sheets[sheetName];
+const excelData = XLSX.utils.sheet_to_json(sheet);
 
 app.post('/calculate', async (req, res) => {
     const { fromPincode, toPincode, weight, length, width, height, numItems } = req.body;
 
-    const client = new MongoClient(uri, {
-        serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-        }
-    });
-
     try {
-        await client.connect();
         const coords1 = await getCoordinates(fromPincode);
         const coords2 = await getCoordinates(toPincode);
         const distance = haversineDistance(coords1, coords2) + 20;
@@ -73,30 +67,21 @@ app.post('/calculate', async (req, res) => {
             priceColumn = 'price_per_kg_1000_plus';
         }
 
-        const db = client.db("lokesh25");
-        const collection = db.collection('won');
-
-        const query = { distance_range: distanceRange };
-        const projection = { supplier_name: 1, [priceColumn]: 1, tat: 1 };
-
-        const rows = await collection.find(query).project(projection).toArray();
-
-        const suppliers = rows.map(row => ({
-            supplierName: row.supplier_name,
-            distance,
-            absoluteWeight,
-            volumetricWeight,
-            finalWeight,
-            calculatedPrice: row[priceColumn] * finalWeight,
-            tat: row.tat
-        }));
+        const suppliers = excelData.filter(row => row.distance_range === distanceRange)
+            .map(row => ({
+                supplierName: row.supplier_name,
+                distance,
+                absoluteWeight,
+                volumetricWeight,
+                finalWeight,
+                calculatedPrice: row[priceColumn] * finalWeight,
+                tat: row.tat
+            }));
 
         res.json(suppliers);
     } catch (err) {
         console.error('Error calculating price:', err);
         res.status(500).json({ error: err.message });
-    } finally {
-        await client.close();
     }
 });
 
