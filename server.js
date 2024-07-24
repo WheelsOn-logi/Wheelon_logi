@@ -29,6 +29,7 @@ const excelData = XLSX.utils.sheet_to_json(sheet);
 
 app.post('/calculate', async (req, res) => {
     const { fromPincode, toPincode, weight, length, width, height, numItems } = req.body;
+    console.log(`cal func reached`);
 
     try {
         const coords1 = await getCoordinates(fromPincode);
@@ -66,7 +67,8 @@ app.post('/calculate', async (req, res) => {
         } else {
             priceColumn = 'price_per_kg_1000_plus';
         }
-
+        console.log(`going to excel opp`);
+        try{
         const suppliers = excelData.filter(row => row.distance_range === distanceRange)
             .map(row => ({
                 supplierName: row.supplier_name,
@@ -77,8 +79,12 @@ app.post('/calculate', async (req, res) => {
                 calculatedPrice: row[priceColumn] * finalWeight,
                 tat: row.tat
             }));
+            console.log(`returning data to called`);
 
         res.json(suppliers);
+        } catch(err1){
+            console.log(`error in excel`,err1);
+        }
     } catch (err) {
         console.error('Error calculating price:', err);
         res.status(500).json({ error: err.message });
