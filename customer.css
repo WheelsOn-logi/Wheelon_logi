@@ -1,8 +1,7 @@
-
-:root{
+:root {
     background-color: #e0e5ec;
-
 }
+
 body {
     font-family: 'Roboto', sans-serif;
     background-color: #e0e5ec;
@@ -14,31 +13,33 @@ body {
     align-items: center;
     min-height: 100vh;
 }
-.top{
+
+.top {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 .header-area {
-    /* background-color: #007bff; */
     padding: 10px 0;
-    width: 100vw;
+    width: 100%;
     height: fit-content;
-    background: linear-gradient(135deg, #a5b4f7 0%, #6f779b 30%, #9380a5 30%,#a78fc0 40%);
+    background: linear-gradient(135deg, #a5b4f7 0%, #6f779b 30%, #9380a5 30%, #a78fc0 40%);
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
 }
 
 .header-area .nav li a {
     color: #fff;
     padding: 10px 20px;
     display: inline-block;
-    position: relative;
-    bottom: 25px;
 }
 
 .header-area .logo h2 {
@@ -46,24 +47,37 @@ body {
     font-weight: bold;
     margin: 0;
 }
-.con1{
+
+.con1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 90%;
 }
-.c2{
+
+.c2 {
     position: relative;
-    top: 100px;
+    top: 20px;
+    width: 100%;
+    max-width: 1200px;
 }
+
+.c{
+    width: 100%;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    left: 5%;
+}
+
 .calculator {
     background-color: #e0e5ec;
-    padding: 30px;
+    padding: 20px;
     border-radius: 15px;
     box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
     margin-bottom: 30px;
-    max-width: 900px;
-    position: relative;
-    left: 35px;
+    width: 100%;
 }
 
 .form-group label {
@@ -71,9 +85,17 @@ body {
     margin-bottom: 5px;
     display: inline-block;
 }
-.form-row{
+
+.form-row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 15px;
+    padding-right: 10px;
 }
 
 .form-group input {
@@ -82,8 +104,6 @@ body {
     border-radius: 10px;
     border: none;
     box-shadow: inset 2px 2px 5px #bebebe, inset -2px -2px 5px #ffffff;
-    margin-bottom: 20px;
-    margin-right: 10px;
     outline: none;
 }
 
@@ -96,23 +116,15 @@ button[type="submit"] {
     color: white;
     font-size: 16px;
     box-shadow: 5px 5px 10px #bebebe, -5px -5px 10px #ffffff;
-    position: relative;
-    width: 60%;
-    left: 20%;
-    bottom: 20%;
 }
 
 .suppliers {
-    /* background: linear-gradient(135deg, #a8e9e0 40%, #a3dbd4 30%); */
-    /* background: radial-gradient(220deg, #92b2c0 40%, #496977 40%); */
-    background:  repeating-radial-gradient(circle at center, rgb(179, 198, 204) 0%, rgb(147, 179, 189) 20%, rgb(146, 177, 187) 60%, rgb(158, 215, 233) 100%);
+    background: repeating-radial-gradient(circle at center, rgb(179, 198, 204) 0%, rgb(147, 179, 189) 20%, rgb(146, 177, 187) 60%, rgb(158, 215, 233) 100%);
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-#container2{
-    
-    visibility:hidden;
+    max-width: 90%;
+    overflow-x: auto;
 }
 
 #suppliersTable {
@@ -141,56 +153,24 @@ button[type="submit"] {
 
 @media (max-width: 760px) {
     .form-row {
-        display: flex;
         flex-direction: column;
     }
-}
-@media (max-width: 700px) {
-    .form-row {
-        display: flex;
-        flex-direction: column;
-    }
-    .con1{
-        max-width: 90%;
-        overflow-x: scroll;
+    .con1 {
+        font-size: smaller;
+        width: 100%;
+        padding: 0 10px;
     }
 }
 
 @media (max-width: 1000px) {
-    
     #suppliersTable {
         display: block;
         overflow-x: auto;
+        font-size: smaller;
     }
 }
 
-
-.highlights {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    position: relative;
-    top: 100px;
-}
-
-.highlight {
-    text-align: center;
-    padding: 10px;
-}
-
-.highlight img {
-    width: 50px;
-    height: 50px;
-}
-
-
-.space{
+.space {
     height: 200px;
     width: 10px;
-
-}
-
-.step{
-    position: relative;
-    top: 100px;
 }
