@@ -20,7 +20,7 @@ app.use(helmet({
     }
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/')));
 
 const workbook = XLSX.readFile('Book1.xlsx');  // Update the path to your Excel file
 const sheetName = workbook.SheetNames[0];
