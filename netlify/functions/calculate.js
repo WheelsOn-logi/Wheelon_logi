@@ -1,15 +1,14 @@
 const axios = require('axios');
-const XLSX = require('xlsx');
-const path = require('path');
 
-const workbook = XLSX.readFile(path.join(__dirname, '../../Book1.xlsx'));
-const sheetName = workbook.SheetNames[0];
-const sheet = workbook.Sheets[sheetName];
-const excelData = XLSX.utils.sheet_to_json(sheet);
+const apiKey = 'ALbCgtIvfsg5oXZQ4S6TtxEuX7VtAzo016dy7GlHZKlMlvR35RUkdxDCuxRxh6Wo'; // Replace with your actual MongoDB Atlas Data API key
+const endpoint = 'https://ap-south-1.aws.data.mongodb-api.com/app/data-ffiqjii/endpoint/data/v1'; // Replace with your actual Data API endpoint
+const dataSource = 'lokesh25'; // Replace with your actual cluster name
+const database = 'lokesh25';
+const collection = 'won';
 
 async function getCoordinates(pincode) {
     try {
-        const response = await axios.get(`https://api.opencagedata.com/geocode/v1/json`, {
+        const response = await axios.get('https://api.opencagedata.com/geocode/v1/json', {
             params: {
                 q: pincode,
                 key: '593d3c5fc767421ba4726516486edda0' // Replace with your OpenCage API key
@@ -44,6 +43,27 @@ function haversineDistance(coords1, coords2) {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c;
     return d;
+}
+
+async function fetchSuppliers(distanceRange) {
+    try {
+        const response = await axios.post(`${endpoint}/action/find`, {
+            dataSource,
+            database,
+            collection,
+            filter: { distance_range: distanceRange }
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': apiKey
+            }
+        });
+
+        return response.data.documents;
+    } catch (error) {
+        console.error('Error fetching suppliers:', error.message);
+        throw new Error('Error fetching suppliers: ' + error.message);
+    }
 }
 
 async function calculate(req, res) {
@@ -86,18 +106,19 @@ async function calculate(req, res) {
             priceColumn = 'price_per_kg_1000_plus';
         }
 
-        const suppliers = excelData.filter(row => row.distance_range === distanceRange)
-            .map(row => ({
-                supplierName: row.supplier_name,
-                distance,
-                absoluteWeight,
-                volumetricWeight,
-                finalWeight,
-                calculatedPrice: row[priceColumn] * finalWeight,
-                tat: row.tat
-            }));
+        const suppliers = await fetchSuppliers(distanceRange);
 
-        res.json(suppliers);
+        const result = suppliers.map(row => ({
+            supplierName: row.supplier_name,
+            distance,
+            absoluteWeight,
+            volumetricWeight,
+            finalWeight,
+            calculatedPrice: row[priceColumn] * finalWeight,
+            tat: row.tat
+        }));
+
+        res.json(result);
     } catch (err) {
         console.error('Error calculating price:', err);
         res.status(500).json({ error: err.message });
