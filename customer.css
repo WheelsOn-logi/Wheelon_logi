@@ -178,3 +178,11 @@ button[type="submit"] {
     height: 200px;
     width: 10px;
 }
+
+
+.ad{
+    position: relative;
+    top: 18px;
+    left: 45%;
+    font-size: 20px;
+}
